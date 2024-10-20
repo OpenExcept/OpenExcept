@@ -2,7 +2,7 @@ import pytest
 import tempfile
 import shutil
 from datetime import datetime, timedelta
-from excgrouper.storage.qdrant import QdrantVectorStorage
+from openexcept.storage.qdrant import QdrantVectorStorage
 import time
 
 @pytest.fixture(scope="function")

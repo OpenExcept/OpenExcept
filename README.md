@@ -1,6 +1,6 @@
-# ExcGrouper
+# OpenExcept
 
-ExcGrouper is an intelligent exception grouping library that uses machine learning to automatically categorize and group similar exceptions without manual rules.
+OpenExcept is an intelligent exception grouping library that uses machine learning to automatically categorize and group similar exceptions without manual rules.
 
 ## Features
 
@@ -13,19 +13,19 @@ ExcGrouper is an intelligent exception grouping library that uses machine learni
 ## Installation
 
 ```bash
-pip install excgrouper
+pip install openexcept
 ```
 
 ## Quick Start
 
 ### Docker Setup
 
-To use ExcGrouper with Docker:
+To use OpenExcept with Docker:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/Owl-Sight-AI/excgrouper.git
-   cd excgrouper
+   git clone https://github.com/OpenExcept/openexcept.git
+   cd openexcept
    ```
 
 2. Build and start the Docker containers:
@@ -34,7 +34,7 @@ To use ExcGrouper with Docker:
    ```
 
    This will start two containers:
-   - ExcGrouper API server on port 8000
+   - OpenExcept API server on port 8000
    - Qdrant vector database on port 6333
 
 3. Install local dependencies
@@ -43,15 +43,15 @@ To use ExcGrouper with Docker:
 pip install -e .
 ```
 
-4. You can now use the ExcGrouper API at `http://localhost:8000`
+4. You can now use the OpenExcept API at `http://localhost:8000`
 You can now use it with an example as `python examples/basic_usage.py`
 
 ### Basic Usage
 
 ```python
-from excgrouper import ExcGrouper
+from openexcept import OpenExcept
 
-grouper = ExcGrouper()
+grouper = OpenExcept()
 
 # Group an exception
 group_id = grouper.group_exception("Connection refused to database xyz123", "ConnectionError")
@@ -62,14 +62,14 @@ top_exceptions = grouper.get_top_exceptions(limit=10, days=1)
 
 ### Integrating with Existing Logger
 
-You can easily integrate ExcGrouper with your existing logging setup:
+You can easily integrate OpenExcept with your existing logging setup:
 
 ```python
 import logging
-from excgrouper import ExcGrouper
+from openexcept import OpenExcept
 
-# Set up ExcGrouper
-grouper = ExcGrouper()
+# Set up OpenExcept
+grouper = OpenExcept()
 
 # Create a custom logging handler
 class GroupingHandler(logging.Handler):

@@ -4,14 +4,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="excgrouper",
+    name="openexcept",
     version="0.1.0",
-    author="Owl-Sight-AI",
+    author="OpenExcept",
     author_email="ai.observability.eng@gmail.com",
     description="Automatic exception grouping using AI",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Owl-Sight-AI/ExcGrouper",
+    url="https://github.com/OpenExcept/OpenExcept",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     classifiers=[

@@ -1,6 +1,6 @@
 import pytest
-from excgrouper.embeddings.sentence_transformers import SentenceTransformerEmbedding
-from excgrouper.core import ExceptionEvent
+from openexcept.embeddings.sentence_transformers import SentenceTransformerEmbedding
+from openexcept.core import ExceptionEvent
 
 @pytest.fixture
 def embedding():

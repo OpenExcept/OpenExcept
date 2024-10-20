@@ -1,11 +1,11 @@
 import pytest
-from excgrouper import ExcGrouper
-from excgrouper.core import ExceptionEvent
+from openexcept import OpenExcept
+from openexcept.core import ExceptionEvent
 from datetime import datetime, timedelta
 
 @pytest.fixture
 def grouper():
-    return ExcGrouper()
+    return OpenExcept()
 
 def test_group_exception(grouper):
     group_id1 = grouper.group_exception("Connection refused to database xyz123", "ConnectionError")
@@ -35,7 +35,7 @@ def test_get_top_exceptions(grouper):
     assert top_exceptions[2]['count'] == 1
 
 def test_exception_hook(grouper):
-    ExcGrouper.setup_exception_hook()
+    OpenExcept.setup_exception_hook()
     
     try:
         1 / 0

@@ -1,7 +1,7 @@
 import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from excgrouper import ExcGrouper
+from openexcept import OpenExcept
 from datetime import datetime
 import logging
 import asyncio
@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
 config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
-grouper = ExcGrouper(config_path=config_path)
+grouper = OpenExcept(config_path=config_path)
 
 class ExceptionInput(BaseModel):
     message: str

@@ -14,7 +14,7 @@ RUN pip install -r requirements.txt
 EXPOSE 8000
 
 # Define environment variable
-ENV NAME ExcGrouper
+ENV NAME OpenExcept
 
 # Run app.py when the container launches with multiple workers
 CMD ["uvicorn", "src.server.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "8"]

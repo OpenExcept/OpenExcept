@@ -2,8 +2,8 @@ import os
 import shutil
 from pathlib import Path
 
-def cleanup_local_fs_excgrouper_storage():
-    local_fs_storage_path = os.path.expanduser("~/.excgrouper")
+def cleanup_local_fs_openexcept_storage():
+    local_fs_storage_path = os.path.expanduser("~/.openexcept")
     
     if Path(local_fs_storage_path).exists():
         try:
@@ -15,4 +15,4 @@ def cleanup_local_fs_excgrouper_storage():
         print(f"No local filesystem storage found at {local_fs_storage_path}")
 
 if __name__ == "__main__":
-    cleanup_local_fs_excgrouper_storage()
+    cleanup_local_fs_openexcept_storage()

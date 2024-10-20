@@ -3,11 +3,11 @@
 # (Recommended) Container configuration example
 storage:
   url: http://localhost:8000
-  # api_key: null # API key for cloud storage on OwlSight
+  # api_key: null # API key for cloud storage on OpenExcept
 
 # Local file system storage configuration example
 # storage:
-#   local_path: ~/.excgrouper
+#   local_path: ~/.openexcept
 
 # (Recommended) config using OpenAI embeddings
 # embedding:

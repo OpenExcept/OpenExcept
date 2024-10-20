@@ -1,6 +1,6 @@
-# Contributing to ExcGrouper
+# Contributing to OpenExcept
 
-We welcome contributions to ExcGrouper! This document outlines the process for contributing to this project.
+We welcome contributions to OpenExcept! This document outlines the process for contributing to this project.
 
 ## Code of Conduct
 
@@ -45,4 +45,4 @@ By participating in this project, you agree to abide by our Code of Conduct.
 
 By contributing, you agree that your contributions will be licensed under the project's existing license.
 
-Thank you for contributing to ExcGrouper!
+Thank you for contributing to OpenExcept!

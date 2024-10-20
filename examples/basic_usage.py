@@ -1,13 +1,13 @@
 import os
-from excgrouper import ExcGrouper
+from openexcept import OpenExcept
 
 def main():
-    # Initialize ExcGrouper with config file
+    # Initialize OpenExcept with config file
     # Replace with the name of the config file you want to use,
     # e.g. config_local_fs.yaml, config_local_url.yaml, config.yaml
     config_name = 'config_local_fs.yaml'
-    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src', 'excgrouper', 'configs', config_name)
-    grouper = ExcGrouper(config_path=config_path)
+    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src', 'openexcept', 'configs', config_name)
+    grouper = OpenExcept(config_path=config_path)
 
     # Group some exceptions
     exceptions = [

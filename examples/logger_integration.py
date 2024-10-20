@@ -1,9 +1,9 @@
 import logging
-from excgrouper import ExcGrouper
+from openexcept import OpenExcept
 
 def setup_logger_with_grouping():
-    # Set up ExcGrouper
-    grouper = ExcGrouper()
+    # Set up OpenExcept
+    grouper = OpenExcept()
 
     # Create a custom logging handler
     class GroupingHandler(logging.Handler):
@@ -46,7 +46,7 @@ def main():
         logger.error("Another division by zero error", exc_info=True)
 
     # Print top exceptions
-    grouper = ExcGrouper()
+    grouper = OpenExcept()
     top_exceptions = grouper.get_top_exceptions(limit=2, days=1)
     print("\nTop 2 exception groups in the last day:")
     for exception in top_exceptions:

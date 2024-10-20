@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "excgrouper"
+name = "openexcept"
 authors = [
     {name = "Your Name", email = "your.email@example.com"},
 ]
@@ -35,7 +35,7 @@ dev = [
 ]
 
 [tool.setuptools_scm]
-write_to = "src/excgrouper/_version.py"
+write_to = "src/openexcept/_version.py"
 
 [tool.pytest.ini_options]
 addopts = "-ra -q"

@@ -10,7 +10,7 @@ from .embeddings.sentence_transformers import SentenceTransformerEmbedding
 from .embeddings.openai_embedding import OpenAIEmbedding
 import requests
 
-class ExcGrouper:
+class OpenExcept:
     def __init__(self, config_path: str = None):
         self.config = self._load_config(config_path)
         

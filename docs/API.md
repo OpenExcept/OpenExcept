@@ -1,16 +1,16 @@
-# ExcGrouper API Documentation
+# OpenExcept API Documentation
 
-## ExcGrouper Class
+## OpenExcept Class
 
-The main class for interacting with the ExcGrouper library.
+The main class for interacting with the OpenExcept library.
 
 ### Methods
 
 #### `__init__(self, url: str = "http://localhost:8000", cloud_api_key: Optional[str] = None, qdrant_url: Optional[str] = None)`
 
-Initializes the ExcGrouper instance.
+Initializes the OpenExcept instance.
 
-- `url`: The URL of the ExcGrouper API server (default: "http://localhost:8000")
+- `url`: The URL of the OpenExcept API server (default: "http://localhost:8000")
 - `cloud_api_key`: API key for cloud version (optional)
 - `qdrant_url`: URL for Qdrant vector database (optional)
 
@@ -36,9 +36,9 @@ Returns: A list of dictionaries containing group_id, count, and metadata for eac
 ## Example Usage
 
 ```python
-from excgrouper import ExcGrouper
+from openexcept import OpenExcept
 
-grouper = ExcGrouper()
+grouper = OpenExcept()
 
 # Group an exception
 group_id = grouper.group_exception("Connection refused to database xyz123", "ConnectionError")
