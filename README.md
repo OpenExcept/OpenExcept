@@ -62,27 +62,15 @@ top_exceptions = grouper.get_top_exceptions(limit=10, days=1)
 
 ### Integrating with Existing Logger
 
-You can easily integrate OpenExcept with your existing logging setup:
+You can easily integrate OpenExcept with your existing logging setup using the provided `OpenExceptHandler`:
 
 ```python
 import logging
-from openexcept import OpenExcept
-
-# Set up OpenExcept
-grouper = OpenExcept()
-
-# Create a custom logging handler
-class GroupingHandler(logging.Handler):
-    def emit(self, record):
-        if record.exc_info:
-            exc_type, exc_value, _ = record.exc_info
-            group_id = grouper.group_exception(str(exc_value), type_name=exc_type.__name__)
-            record.msg = f"[Group: {group_id}] {record.msg}"
+from openexcept.handlers import OpenExceptHandler
 
 # Set up logging
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
-logger.addHandler(GroupingHandler())
+logger.addHandler(OpenExceptHandler())
 
 # Now, when you log an error, it will be automatically grouped
 try:
@@ -91,7 +79,9 @@ except ZeroDivisionError as e:
     logger.error("An error occurred", exc_info=True)
 ```
 
-For more detailed examples, check the `examples/` directory in the project repository.
+This will automatically group exceptions and add the group ID to the log message.
+
+For more detailed examples, check the `examples/logger_integration.py` in the project repository.
 
 ## Documentation
 

@@ -11,7 +11,19 @@ from .embeddings.openai_embedding import OpenAIEmbedding
 import requests
 
 class OpenExcept:
+    _instance = None
+
+    def __new__(cls, config_path: str = None):
+        if cls._instance is None:
+            cls._instance = super(OpenExcept, cls).__new__(cls)
+            cls._instance._initialized = False
+        return cls._instance
+
     def __init__(self, config_path: str = None):
+        if self._initialized:
+            return
+        self._initialized = True
+        
         self.config = self._load_config(config_path)
         
         if 'local_path' in self.config['storage'] or 'local_url' in self.config['storage']:
@@ -21,7 +33,7 @@ class OpenExcept:
     
     def _load_config(self, config_path: str = None):
         if not config_path:
-            config_path = os.path.join(os.path.dirname(__file__), 'configs', 'config.yaml')
+            config_path = os.path.join(os.path.dirname(__file__), 'configs', 'config_local_fs.yaml')
         
         with open(config_path, 'r') as f:
             return yaml.safe_load(f)

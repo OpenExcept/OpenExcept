@@ -3,7 +3,7 @@ from openexcept import OpenExcept
 from openexcept.core import ExceptionEvent
 from datetime import datetime, timedelta
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def grouper():
     return OpenExcept()
 
@@ -43,3 +43,28 @@ def test_exception_hook(grouper):
         pass  # The exception hook should have processed this
 
     top_exceptions = grouper.get_top_exceptions(limit=1, days=1)
+
+def test_singleton_behavior():
+    # Create two instances of OpenExcept
+    instance1 = OpenExcept()
+    instance2 = OpenExcept()
+
+    # Check that both instances are the same object
+    assert instance1 is instance2
+
+    # Modify an attribute in one instance
+    instance1.test_attribute = "test_value"
+
+    # Check that the attribute is present in the other instance
+    assert hasattr(instance2, "test_attribute")
+    assert instance2.test_attribute == "test_value"
+
+    # Create another instance with a different config path
+    instance3 = OpenExcept(config_path="different_config.yaml")
+
+    # Check that it's still the same instance
+    assert instance1 is instance3
+    assert instance2 is instance3
+
+    # Verify that the config hasn't changed (it should use the first initialized config)
+    assert instance3.config == instance1.config

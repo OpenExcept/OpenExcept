@@ -1,27 +1,20 @@
+import os
 import logging
-from openexcept import OpenExcept
+from openexcept import OpenExcept, OpenExceptHandler
 
 def setup_logger_with_grouping():
-    # Set up OpenExcept
-    grouper = OpenExcept()
-
-    # Create a custom logging handler
-    class GroupingHandler(logging.Handler):
-        def emit(self, record):
-            if record.exc_info:
-                exc_type, exc_value, _ = record.exc_info
-                group_id = grouper.group_exception(str(exc_value), type_name=exc_type.__name__)
-                record.msg = f"[Group: {group_id}] {record.msg}"
-            print(self.format(record))  # Print to console for demonstration
-
     # Set up logging
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
     
-    # Add the GroupingHandler
-    grouping_handler = GroupingHandler()
-    grouping_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-    logger.addHandler(grouping_handler)
+    # Initialize OpenExceptHandler with config file
+    # Replace with the name of the config file you want to use,
+    # e.g. config_local_fs.yaml, config_local_url.yaml, config.yaml
+    config_name = 'config_local_fs.yaml'
+    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'src', 'openexcept', 'configs', config_name)
+    handler = OpenExceptHandler(config_path=config_path)
+    handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+    logger.addHandler(handler)
 
     return logger
 
