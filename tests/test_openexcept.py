@@ -17,22 +17,22 @@ def test_group_exception(grouper):
     
     assert group_id3 != group_id1
 
-def test_get_top_exceptions(grouper):
-    # Generate some exceptions
-    for _ in range(5):
-        grouper.group_exception("Connection refused to database xyz123", "ConnectionError")
-    
-    for _ in range(3):
-        grouper.group_exception("Division by zero", "ZeroDivisionError")
-    
-    grouper.group_exception("Index out of range", "IndexError")
-    
-    top_exceptions = grouper.get_top_exceptions(limit=3, days=1)
-    
-    assert len(top_exceptions) == 3
-    assert top_exceptions[0]['count'] == 5
-    assert top_exceptions[1]['count'] == 3
-    assert top_exceptions[2]['count'] == 1
+def test_get_top_exception_groups(grouper):
+    exception_data = [
+        ("Connection refused to database xyz123", "ConnectionError", 5),
+        ("Division by zero", "ZeroDivisionError", 3),
+        ("Index out of range", "IndexError", 1)
+    ]
+
+    for message, error_type, count in exception_data:
+        for _ in range(count):
+            grouper.group_exception(message, error_type)
+
+    top_exception_groups = grouper.get_top_exception_groups(limit=3)
+
+    assert len(top_exception_groups) == 3
+    for i, (_, _, expected_count) in enumerate(exception_data):
+        assert top_exception_groups[i]['count'] == expected_count
 
 def test_exception_hook(grouper):
     OpenExcept.setup_exception_hook()
@@ -42,7 +42,7 @@ def test_exception_hook(grouper):
     except ZeroDivisionError:
         pass  # The exception hook should have processed this
 
-    top_exceptions = grouper.get_top_exceptions(limit=1, days=1)
+    top_exceptions = grouper.get_top_exception_groups(limit=1)
 
 def test_singleton_behavior():
     # Create two instances of OpenExcept

@@ -40,10 +40,13 @@ def main():
 
     # Print top exceptions
     grouper = OpenExcept()
-    top_exceptions = grouper.get_top_exceptions(limit=2, days=1)
-    print("\nTop 2 exception groups in the last day:")
-    for exception in top_exceptions:
+    top_exception_groups = grouper.get_top_exception_groups(2)
+    print("Top 2 exception groups:")
+    for exception in top_exception_groups:
         print(f"Group: {exception['group_id']}, Count: {exception['count']}")
+        print(f"Example message: {exception['metadata']['example_message']}")
+        print(f"Example type: {exception['metadata']['example_type']}")
+        print()
 
 if __name__ == "__main__":
     main()

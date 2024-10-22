@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from openexcept import OpenExcept
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 import asyncio
 from fastapi.responses import JSONResponse
@@ -44,14 +44,18 @@ async def process_exception(exception: ExceptionInput):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/top_exceptions")
-async def get_top_exceptions(limit: int = 10, days: int = 1):
+async def get_top_exception_groups(limit: int = 10, start_time: datetime = None, end_time: datetime = None):
     try:
         # Add logging to see what's being passed to the method
-        logging.info(f"Fetching top exceptions with limit={limit} and days={days}")
+        logging.info(f"Fetching top exceptions groups with limit={limit}, start_time={start_time}, end_time={end_time}")
+        
+        # If start_time is not provided, set it to 24 hours ago
+        if start_time is None:
+            start_time = datetime.now() - timedelta(days=1)
         
         # Add a timeout of 30 seconds
         result = await asyncio.wait_for(
-            asyncio.to_thread(grouper.get_top_exceptions, limit=limit, days=days),
+            asyncio.to_thread(grouper.get_top_exceptions, limit=limit, start_time=start_time, end_time=end_time),
             timeout=30.0
         )
         return JSONResponse(content=result)
@@ -60,5 +64,4 @@ async def get_top_exceptions(limit: int = 10, days: int = 1):
     except Exception as e:
         # Log the full exception details
         logging.exception("An error occurred while fetching top exceptions")
-        import traceback; traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))

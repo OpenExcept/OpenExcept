@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta
 import typing as t
 from abc import ABC, abstractmethod
+import uuid
+from .storage.base import VectorStorage  # Import VectorStorage from base.py
 
 class ExceptionEvent:
-    def __init__(self, message: str, type: str, timestamp: datetime = None, stack_trace: str = "", context: dict = None):
+    def __init__(self, message: str, type: str, timestamp: datetime = None, stack_trace: str = "", context: dict = None, id: str = None):
+        self.id = id or str(uuid.uuid4())
         self.message = message
         self.type = type
         self.timestamp = timestamp or datetime.now()
@@ -16,23 +19,6 @@ class GroupingResult:
         self.confidence = confidence
         self.similar_groups = similar_groups or []
         self.is_new_group = is_new_group
-
-class VectorStorage(ABC):
-    @abstractmethod
-    def store_vector(self, vector: t.List[float], metadata: dict) -> str:
-        pass
-
-    @abstractmethod
-    def find_similar(self, vector: t.List[float], threshold: float) -> t.List[tuple[str, float]]:
-        pass
-
-    @abstractmethod
-    def increment_occurrence(self, group_id: str, timestamp: datetime):
-        pass
-
-    @abstractmethod
-    def get_top_exceptions(self, limit: int, time_range: timedelta) -> t.List[dict]:
-        pass
 
 class VectorEmbedding(ABC):
     @abstractmethod
@@ -51,25 +37,28 @@ class ExceptionGrouper:
 
         if similar:
             group_id, confidence = similar[0]
-            self.storage.increment_occurrence(group_id, event.timestamp)
-            return GroupingResult(
-                group_id=group_id,
-                confidence=confidence,
-                similar_groups=[g for g, _ in similar[1:]],
-                is_new_group=False
-            )
+            is_new_group = False
+        else:
+            group_id = self.storage.store_vector(vector, {
+                "first_seen": event.timestamp.isoformat(),
+                "example_type": event.type,
+                "example_message": event.message
+            })
+            confidence = 1.0
+            is_new_group = True
 
-        group_id = self.storage.store_vector(vector, {
-            "first_seen": event.timestamp.isoformat(),
-            "type": event.type,
-            "example_message": event.message
-        })
+        # Store the exception event with the group ID
+        self.storage.store_exception_event(group_id, event, vector)
 
         return GroupingResult(
             group_id=group_id,
-            confidence=1.0,
-            is_new_group=True
+            confidence=confidence,
+            similar_groups=[g for g, _ in similar[1:]] if similar else [],
+            is_new_group=is_new_group
         )
 
-    def get_top_exceptions(self, limit: int = 10, days: int = 1) -> t.List[dict]:
-        return self.storage.get_top_exceptions(limit, timedelta(days=days))
+    def get_exception_events(self, group_id: str, start_time: datetime = None, end_time: datetime = None) -> t.List[ExceptionEvent]:
+        return self.storage.get_exception_events(group_id, start_time, end_time)
+    
+    def get_top_exception_groups(self, limit: int = 10, start_time: datetime = None, end_time: datetime = None) -> t.List[dict]:
+        return self.storage.get_top_exception_groups(limit, start_time, end_time)

@@ -53,11 +53,20 @@ from openexcept import OpenExcept
 
 grouper = OpenExcept()
 
-# Group an exception
-group_id = grouper.group_exception("Connection refused to database xyz123", "ConnectionError")
+exceptions = [
+    "Connection refused to database xyz123",
+    "Connection refused to database abc987",
+    "Divide by zero error in calculate_average()",
+    "Index out of range in process_list()",
+    "Connection timeout to service endpoint",
+]
 
-# Get top exceptions
-top_exceptions = grouper.get_top_exceptions(limit=10, days=1)
+for exception in exceptions:
+    group_id = grouper.group_exception(exception)
+
+# When we get the top 1 exception group, it should return the group
+# that contains "Connection refused to database xyz123" since it occurs the most
+top_exception_groups = grouper.get_top_exception_groups(1)
 ```
 
 ### Integrating with Existing Logger

@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import yaml
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from datetime import datetime
 from .core import ExceptionGrouper, ExceptionEvent
 from .storage.qdrant import QdrantVectorStorage
@@ -98,11 +98,37 @@ class OpenExcept:
             result = self._make_request("process", method="POST", data=data)
             return result["group_id"]
 
-    def get_top_exceptions(self, limit: int = 10, days: int = 1) -> List[Dict]:
+    def get_top_exception_groups(self, limit: int, start_time: datetime = None, end_time: datetime = None) -> List[Dict[str, Any]]:
         if hasattr(self, 'grouper'):
-            return self.grouper.get_top_exceptions(limit, days)
+            return self.grouper.get_top_exception_groups(limit, start_time, end_time)
         else:
-            return self._make_request("top_exceptions", data={"limit": limit, "days": days})
+            data = {
+                "limit": limit,
+                "start_time": start_time.isoformat() if start_time else None,
+                "end_time": end_time.isoformat() if end_time else None
+            }
+            return self._make_request("top_exceptions", method="POST", data=data)
+
+    def get_exception_events(self, group_id: str, start_time: datetime = None, end_time: datetime = None) -> List[ExceptionEvent]:
+        if hasattr(self, 'grouper'):
+            return self.grouper.get_exception_events(group_id, start_time, end_time)
+        else:
+            # Placeholder for cloud implementation
+            data = {
+                "group_id": group_id,
+                "start_time": start_time.isoformat() if start_time else None,
+                "end_time": end_time.isoformat() if end_time else None
+            }
+            result = self._make_request("get_exception_events", method="POST", data=data)
+            # Convert response to ExceptionEvent objects
+            return [ExceptionEvent(
+                id=evt['id'],
+                message=evt['message'],
+                type=evt['type'],
+                timestamp=datetime.fromisoformat(evt['timestamp']),
+                stack_trace=evt.get('stack_trace', ''),
+                context=evt.get('context', {})
+            ) for evt in result.get("events", [])]
 
     @classmethod
     def setup_exception_hook(cls, **kwargs):
