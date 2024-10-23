@@ -270,13 +270,13 @@ def test_get_top_exception_groups_with_time_range(qdrant_storage):
     assert sorted([group["count"] for group in current_events]) == [1, 2, 3]
 
     # Verify correct ordering and metadata
-    all_time_order = [group["metadata"]["message"] for group in all_events]
+    all_time_order = [group["metadata"]["example_message"] for group in all_events]
     assert all_time_order == ["Exception B", "Exception A", "Exception C"] or \
-           all_time_order == ["Exception A", "Exception B", "Exception C"]
+           all_time_order == ["Exception B", "Exception C", "Exception A"]
 
-    last_hour_order = [group["metadata"]["message"] for group in last_hour_events]
+    last_hour_order = [group["metadata"]["example_message"] for group in last_hour_events]
     assert last_hour_order[0] == "Exception C"
     assert set(last_hour_order[1:]) == {"Exception A", "Exception B"}
 
-    current_order = [group["metadata"]["message"] for group in current_events]
+    current_order = [group["metadata"]["example_message"] for group in current_events]
     assert current_order == ["Exception C", "Exception B", "Exception A"]
