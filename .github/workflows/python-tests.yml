@@ -1,0 +1,49 @@
+name: Python Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: 'pip'
+    
+    - name: Generate cache key files
+      run: |
+        echo "$(pip -V)" >> cache_key.txt
+        if [ -f requirements.txt ]; then cat requirements.txt >> cache_key.txt; fi
+        if [ -f requirements-dev.txt ]; then cat requirements-dev.txt >> cache_key.txt; fi
+        if [ -f pyproject.toml ]; then cat pyproject.toml >> cache_key.txt; fi
+        if [ -f setup.py ]; then cat setup.py >> cache_key.txt; fi
+
+    - name: Cache virtual environment
+      uses: actions/cache@v4
+      id: cache-venv
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-py3.12-${{ hashFiles('cache_key.txt') }}
+    
+    - name: Install dependencies
+      if: steps.cache-venv.outputs.cache-hit != 'true'
+      run: |
+        python -m venv .venv
+        source .venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install pytest
+        pip install -e .
+    
+    - name: Run tests
+      run: |
+        source .venv/bin/activate
+        pytest ./
