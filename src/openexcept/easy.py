@@ -11,19 +11,7 @@ from .embeddings.openai_embedding import OpenAIEmbedding
 import requests
 
 class OpenExcept:
-    _instance = None
-
-    def __new__(cls, config_path: str = None):
-        if cls._instance is None:
-            cls._instance = super(OpenExcept, cls).__new__(cls)
-            cls._instance._initialized = False
-        return cls._instance
-
     def __init__(self, config_path: str = None):
-        if self._initialized:
-            return
-        self._initialized = True
-        
         self.config = self._load_config(config_path)
         
         if 'local_path' in self.config['storage'] or 'local_url' in self.config['storage']:
@@ -130,12 +118,12 @@ class OpenExcept:
                 context=evt.get('context', {})
             ) for evt in result.get("events", [])]
 
-    @classmethod
-    def setup_exception_hook(cls, **kwargs):
+    @staticmethod
+    def setup_exception_hook(config_path: Optional[str] = None) -> 'OpenExcept':
         import sys
         import traceback
         
-        grouper = cls(**kwargs)
+        grouper = OpenExcept(config_path=config_path)
         
         def exception_hook(exc_type, exc_value, exc_traceback):
             group_id = grouper.group_exception(
@@ -146,3 +134,5 @@ class OpenExcept:
             print(f"Exception in group {group_id}: {exc_value}")
         
         sys.excepthook = exception_hook
+
+        return grouper

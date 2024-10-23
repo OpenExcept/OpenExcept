@@ -2,10 +2,41 @@ import pytest
 from openexcept import OpenExcept
 from openexcept.core import ExceptionEvent
 from datetime import datetime, timedelta
+import tempfile
+import shutil
+import os
+import yaml
 
 @pytest.fixture(scope="function")
-def grouper():
-    return OpenExcept()
+def config_path():
+    # Create a temporary directory
+    temp_dir = tempfile.mkdtemp()
+    
+    # Create a temporary config file
+    config = {
+        'storage': {'local_path': temp_dir},
+        'embedding': {
+            'class': 'SentenceTransformerEmbedding',
+            'similarity_threshold': 0.8,
+            'kwargs': {'model_name': 'all-mpnet-base-v2'}
+        }
+    }
+    
+    config_path = os.path.join(temp_dir, 'config.yaml')
+    with open(config_path, 'w') as f:
+        yaml.dump(config, f)
+    
+    yield config_path
+    
+    # Cleanup after test
+    shutil.rmtree(temp_dir)
+
+@pytest.fixture(scope="function")
+def grouper(config_path):
+    # Create OpenExcept instance with temporary config
+    instance = OpenExcept(config_path=config_path)
+    
+    yield instance
 
 def test_group_exception(grouper):
     group_id1 = grouper.group_exception("Connection refused to database xyz123", "ConnectionError")
@@ -34,37 +65,44 @@ def test_get_top_exception_groups(grouper):
     for i, (_, _, expected_count) in enumerate(exception_data):
         assert top_exception_groups[i]['count'] == expected_count
 
-def test_exception_hook(grouper):
-    OpenExcept.setup_exception_hook()
+def test_exception_hook(config_path):
+    import multiprocessing
+    import os
+    import sys
+
+    def process_function(config_path, exception_type):
+        # Redirect stderr to /dev/null to suppress output
+        sys.stderr = open(os.devnull, 'w')
+        
+        grouper = OpenExcept.setup_exception_hook(config_path=config_path)
+        if exception_type == 'ZeroDivisionError':
+            1 / 0  # This will raise ZeroDivisionError
+        elif exception_type == 'ValueError':
+            int('not a number')  # This will raise ValueError
+        del grouper
+
+    # Start two separate processes
+    process1 = multiprocessing.Process(target=process_function, args=(config_path, 'ZeroDivisionError'))
+    process2 = multiprocessing.Process(target=process_function, args=(config_path, 'ValueError'))
+
+    process1.start()
+    process2.start()
+
+    # Wait for both processes to finish
+    process1.join()
+    process2.join()
+
+    grouper = OpenExcept.setup_exception_hook(config_path=config_path)
+    top_exceptions = grouper.get_top_exception_groups(limit=2)
     
-    try:
-        1 / 0
-    except ZeroDivisionError:
-        pass  # The exception hook should have processed this
-
-    top_exceptions = grouper.get_top_exception_groups(limit=1)
-
-def test_singleton_behavior():
-    # Create two instances of OpenExcept
-    instance1 = OpenExcept()
-    instance2 = OpenExcept()
-
-    # Check that both instances are the same object
-    assert instance1 is instance2
-
-    # Modify an attribute in one instance
-    instance1.test_attribute = "test_value"
-
-    # Check that the attribute is present in the other instance
-    assert hasattr(instance2, "test_attribute")
-    assert instance2.test_attribute == "test_value"
-
-    # Create another instance with a different config path
-    instance3 = OpenExcept(config_path="different_config.yaml")
-
-    # Check that it's still the same instance
-    assert instance1 is instance3
-    assert instance2 is instance3
-
-    # Verify that the config hasn't changed (it should use the first initialized config)
-    assert instance3.config == instance1.config
+    assert len(top_exceptions) == 2, "Expected 2 exception groups"
+    
+    # Check ZeroDivisionError
+    assert any(group['metadata']['example_type'] == 'ZeroDivisionError' for group in top_exceptions), "ZeroDivisionError not found in top exceptions"
+    
+    # Check ValueError
+    assert any(group['metadata']['example_type'] == 'ValueError' for group in top_exceptions), "ValueError not found in top exceptions"
+    
+    # Check exception messages
+    assert any('division by zero' in group['metadata']['example_message'].lower() for group in top_exceptions), "Expected 'division by zero' message"
+    assert any('invalid literal for int' in group['metadata']['example_message'].lower() for group in top_exceptions), "Expected 'invalid literal for int' message"
