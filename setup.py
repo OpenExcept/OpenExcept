@@ -29,7 +29,7 @@ setup(
     ],
     python_requires=">=3.7",
     install_requires=[
-        "fastapi==0.95.1",
+        "fastapi>=0.95.1",
         "openai==1.51.2",
         "qdrant-client==1.12.0",
         "requests==2.30.0",
