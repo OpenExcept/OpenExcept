@@ -66,21 +66,21 @@ class OpenExcept:
         response.raise_for_status()
         return response.json()
 
-    def group_exception(self, message: str, type_name: str = None, **context) -> str:
+    def group_exception(self, message: str, type_name: str = "Unknown", timestamp: datetime = datetime.now()) -> str:
+        # TODO fix this
         if hasattr(self, 'grouper'):
             event = ExceptionEvent(
                 message=message,
-                type=type_name or "Unknown",
-                context=context
+                type=type_name,
+                timestamp=timestamp,
             )
             result = self.grouper.process(event)
             return result.group_id
         else:
             data = {
                 "message": message,
-                "type": type_name or "Unknown",
-                "timestamp": datetime.now().isoformat(),
-                "context": context,
+                "type": type_name,
+                "timestamp": timestamp,
                 "similarity_threshold": self.config['embedding']['similarity_threshold']
             }
             result = self._make_request("process", method="POST", data=data)

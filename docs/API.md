@@ -69,9 +69,6 @@ top_exceptions = grouper.get_top_exception_groups(limit=5, start_time=start_time
 
 # Get exception events for a specific group
 events = grouper.get_exception_events(group_id, start_time=start_time, end_time=end_time)
-
-# Set up global exception hook for uncaught exceptions
-OpenExcept.setup_exception_hook()
 ```
 
 For more detailed examples, refer to the `examples/` directory in the project repository.

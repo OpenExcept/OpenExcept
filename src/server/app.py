@@ -17,7 +17,7 @@ grouper = OpenExcept(config_path=config_path)
 class ExceptionInput(BaseModel):
     message: str
     type: str = "Unknown"
-    timestamp: datetime = None
+    timestamp: datetime
     context: dict = {}
 
 class GroupResult(BaseModel):
@@ -32,7 +32,7 @@ async def process_exception(exception: ExceptionInput):
                 grouper.group_exception,
                 message=exception.message,
                 type_name=exception.type,
-                timestamp=exception.timestamp or datetime.now(),
+                timestamp=exception.timestamp,
                 **exception.context
             ),
             timeout=10.0,

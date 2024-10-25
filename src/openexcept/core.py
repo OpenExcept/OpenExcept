@@ -9,7 +9,7 @@ class ExceptionEvent:
         self.id = id or str(uuid.uuid4())
         self.message = message
         self.type = type
-        self.timestamp = timestamp or datetime.now()
+        self.timestamp = timestamp or datetime.now() # in datetime object
         self.stack_trace = stack_trace
         self.context = context or {}
 
