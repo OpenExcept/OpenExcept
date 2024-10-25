@@ -5,15 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "openexcept"
 authors = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "OpenExcept", email = "ai.observability.eng@gmail.com"},
 ]
 description = "Automatic exception grouping using AI"
 readme = "README.md"
 requires-python = ">=3.7"
-license = {text = "MIT"}
+license = {text = "AGPLv3"}
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
     "Operating System :: OS Independent",
 ]
 dependencies = [
