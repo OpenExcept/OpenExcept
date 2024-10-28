@@ -2,7 +2,7 @@
 
 OpenExcept is an exception analysis engine. 
 
-Your application is throwing tons of exceptions, each exception trace is slightly different and many of them do not have pre-defined exception classes. How do I know which exceptions are most common?
+Your application is throwing tons of exceptions, each exception trace is slightly different and many of them do not have pre-defined exception classes. How do you know which exceptions are most common? How do you know there are suddenly increases of certain exception types?
 
 OpenExcept intelligently groups exceptions based on their semantic meaning, making it easier to identify patterns and address issues more efficiently.
 
