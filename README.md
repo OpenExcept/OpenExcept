@@ -8,7 +8,7 @@ OpenExcept intelligently cluster exceptions based on their semantic meaning, mak
 
 ## Features
 
-- 🤖 Automatic Exception Clustering: Uses machine learning to categorize exceptions without manual intervention.
+- 🤖 Automatic Exception Clustering: Uses AI to cluster exceptions without manual intervention. Once they are clustered, you can do analysis much more easily!
 - 🔌 Easy Integration: Seamlessly fits into your existing logging systems.
 - 🚀 Simple API: Get started quickly with a straightforward and intuitive API.
 - 🐳 Docker Support: Easily deployable with Docker for hassle-free setup.
