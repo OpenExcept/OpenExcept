@@ -1,6 +1,6 @@
 # OpenExcept
 
-OpenExcept is an exception analysis engine. 
+OpenExcept is an AI based exception aggregation engine. 
 
 Your application is throwing tons of exceptions, each exception trace is slightly different and many of them do not have pre-defined exception classes. How do you know which exceptions are most common? How do you know there are suddenly increases of certain exception types?
 
