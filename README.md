@@ -1,14 +1,14 @@
 # OpenExcept
 
-OpenExcept is an AI based exception aggregation engine. 
+OpenExcept is an AI based exception clustering engine. 
 
 Your application is throwing tons of exceptions, each exception trace is slightly different and many of them do not have pre-defined exception classes. How do you know which exceptions are most common? How do you know there are suddenly increases of certain exception types?
 
-OpenExcept intelligently groups exceptions based on their semantic meaning, making it easier to identify patterns and address issues more efficiently.
+OpenExcept intelligently cluster exceptions based on their semantic meaning, making it easier to identify patterns and address issues more efficiently.
 
 ## Features
 
-- 🤖 Automatic Exception Grouping: Uses machine learning to categorize exceptions without manual intervention.
+- 🤖 Automatic Exception Clustering: Uses machine learning to categorize exceptions without manual intervention.
 - 🔌 Easy Integration: Seamlessly fits into your existing logging systems.
 - 🚀 Simple API: Get started quickly with a straightforward and intuitive API.
 - 🐳 Docker Support: Easily deployable with Docker for hassle-free setup.
@@ -91,7 +91,7 @@ except ZeroDivisionError as e:
     logger.error("An error occurred", exc_info=True)
 ```
 
-This will automatically group exceptions and add the group ID to the log message.
+This will automatically cluster exceptions and add the cluster ID to the log message.
 
 For more detailed examples, check the `examples/logger_integration.py` in the project repository.
 
