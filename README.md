@@ -1,14 +1,14 @@
 # OpenExcept
 
-OpenExcept is an exception analysis engine. 
+OpenExcept is an AI based exception grouping engine. 
 
-Your application is throwing tons of exceptions, each exception trace is slightly different and many of them do not have pre-defined exception classes. How do I know which exceptions are most common?
+Your application is throwing tons of exceptions, each exception trace is slightly different and many of them do not have pre-defined exception classes. How do you know which exceptions are most common? How do you know there are suddenly increases of certain exception types?
 
-OpenExcept intelligently groups exceptions based on their semantic meaning, making it easier to identify patterns and address issues more efficiently.
+OpenExcept intelligently group exceptions based on their semantic meaning, making it easier to identify patterns and address issues more efficiently.
 
 ## Features
 
-- 🤖 Automatic Exception Grouping: Uses machine learning to categorize exceptions without manual intervention.
+- 🤖 Automatic Exception Grouping: Uses AI to group exceptions without manual intervention. Once they are grouped, you can do analysis much more easily!
 - 🔌 Easy Integration: Seamlessly fits into your existing logging systems.
 - 🚀 Simple API: Get started quickly with a straightforward and intuitive API.
 - 🐳 Docker Support: Easily deployable with Docker for hassle-free setup.
