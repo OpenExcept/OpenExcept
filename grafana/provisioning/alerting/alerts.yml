@@ -1,0 +1,38 @@
+apiVersion: 1
+
+groups:
+  - name: OpenExcept
+    folder: OpenExcept
+    interval: 60s
+    rules:
+      - uid: high-exception-rate
+        title: High Exception Rate
+        condition: and
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300    # 5 minutes in seconds
+              to: 0        # now
+            datasourceUid: postgresql
+            model:
+              datasource:
+                type: postgres
+                uid: postgresql
+              format: time_series
+              rawSql: |
+                SELECT
+                  count(*) as value,
+                  NOW() as time
+                FROM exception_events
+                WHERE
+                  timestamp >= NOW() - INTERVAL '5 minutes'
+                GROUP BY group_id
+                HAVING count(*) > 10
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High exception rate detected
+          description: Exception rate exceeded threshold in the last 5 minutes

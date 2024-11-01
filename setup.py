@@ -36,6 +36,8 @@ setup(
         "sentence-transformers==3.2.0",
         "huggingface_hub>=0.20.0",
         "uvicorn==0.22.0",
+        "psycopg2-binary>=2.9.9",
+        "sqlalchemy>=2.0.0",
     ],
     extras_require={
         "dev": ["pytest", "black", "isort"],

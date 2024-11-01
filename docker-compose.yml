@@ -10,13 +10,44 @@ services:
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
+      - POSTGRES_USER=openexcept
+      - POSTGRES_PASSWORD=openexcept
+      - POSTGRES_DB=openexcept
+      - POSTGRES_HOST=postgres
     depends_on:
-      - qdrant
-    command: ["uvicorn", "src.server.app:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4", "--reload"]
+      - postgres
+    command: ["./scripts/wait-for-it.sh", "postgres:5432", "--", "./scripts/start.sh"]
 
-  qdrant:
-    image: qdrant/qdrant
+  postgres:
+    image: ankane/pgvector:latest
     ports:
-      - "6333:6333"
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=openexcept
+      - POSTGRES_PASSWORD=openexcept
+      - POSTGRES_DB=openexcept
     volumes:
-      - ./qdrant_data:/qdrant/storage
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openexcept"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  grafana_data:

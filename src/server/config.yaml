@@ -1,6 +1,7 @@
 # Local vector database storage configuration example
 storage:
-  local_url: http://qdrant:6333
+  type: postgres
+  connection_string: "postgresql://openexcept:openexcept@postgres:5432/openexcept"
 
 # (Recommended) config using OpenAI embeddings
 # embedding:

@@ -2,8 +2,8 @@
 
 # (Recommended) Container configuration example
 storage:
-  url: http://localhost:8000
-  # api_key: null # API key for cloud storage on OpenExcept
+  type: postgres
+  connection_string: "postgresql://openexcept:openexcept@postgres:5432/openexcept"
 
 # Local file system storage configuration example
 # storage:

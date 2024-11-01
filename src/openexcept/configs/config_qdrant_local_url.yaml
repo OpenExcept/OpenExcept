@@ -1,7 +1,10 @@
+# Local vector database storage configuration example
+# Pre-requisite: Qdrant server running on localhost:6333, 
+# command: docker run -p 6333:6333 -v $(pwd)/qdrant_data:/qdrant/storage qdrant/qdrant
 
-# Local file system storage configuration example
 storage:
-  local_path: ~/.openexcept
+  type: qdrant
+  local_url: localhost:6333
 
 # (Recommended) config using OpenAI embeddings
 # embedding:

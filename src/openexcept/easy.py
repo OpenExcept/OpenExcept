@@ -14,14 +14,14 @@ class OpenExcept:
     def __init__(self, config_path: str = None):
         self.config = self._load_config(config_path)
         
-        if 'local_path' in self.config['storage'] or 'local_url' in self.config['storage']:
+        if 'type' in self.config['storage']:
             self._setup_local()
         else:
             self._setup_cloud()
     
     def _load_config(self, config_path: str = None):
         if not config_path:
-            config_path = os.path.join(os.path.dirname(__file__), 'configs', 'config_local_fs.yaml')
+            config_path = os.path.join(os.path.dirname(__file__), 'configs', 'config.yaml')
         
         with open(config_path, 'r') as f:
             return yaml.safe_load(f)

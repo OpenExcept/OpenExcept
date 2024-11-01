@@ -1,0 +1,9 @@
+storage:
+  type: qdrant
+  local_url: http://qdrant:6333
+
+embedding:
+  class: SentenceTransformerEmbedding
+  kwargs:
+    model_name: all-mpnet-base-v2
+  similarity_threshold: 0.8 

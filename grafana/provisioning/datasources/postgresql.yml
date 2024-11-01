@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL
+    type: postgres
+    uid: postgresql
+    url: postgres:5432
+    user: openexcept
+    secureJsonData:
+      password: openexcept
+    jsonData:
+      database: openexcept
+      sslmode: disable
+      maxOpenConns: 100
+      maxIdleConns: 100
+      maxIdleConnsAuto: true
+      connMaxLifetime: 14400
+    isDefault: true
